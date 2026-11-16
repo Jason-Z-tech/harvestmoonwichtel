@@ -1,0 +1,1184 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>Harvest Moon DS Wichtel</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Pixelify+Sans:wght@500;700&display=swap">
+<style>
+/* Layout: Feld-Notizbuch. Fortschritt oben, die 10 Team-Farben als Filterfelder, darunter die Liste je Team in einer Spalte (max. 56rem). */
+:root {
+  --bg: #EDF2E8;
+  --surface: #FAFCF7;
+  --ink: #1C281D;
+  --muted: #536554;
+  --line: #C9D6C5;
+  --accent: #2E6A33;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #D8E8D2;
+  --done: #E3EBDF;
+  --ring: rgba(28, 40, 29, .38);
+  --shadow: 0 1px 2px rgba(28, 40, 29, .08), 0 2px 8px rgba(28, 40, 29, .05);
+  --t-braun: #8A5A33;
+  --t-schwarz: #262626;
+  --t-blau: #2F74D0;
+  --t-rot: #D23F3F;
+  --t-gelb: #E2B300;
+  --t-gruen: #3E9E4A;
+  --t-indigo: #4B3DA6;
+  --t-orange: #E57A1F;
+  --t-lila: #9446C7;
+  --t-weiss: #FFFFFF;
+  --font-display: "Pixelify Sans", "Courier New", ui-monospace, monospace;
+  --font-body: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --fs-xs: .78rem;
+  --fs-sm: .875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.2rem;
+  --fs-xl: 1.6rem;
+  --fs-xxl: 3rem;
+  --r: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1510;
+    --surface: #172018;
+    --ink: #E3ECDF;
+    --muted: #9DAE9B;
+    --line: #2C3B2D;
+    --accent: #86C97D;
+    --accent-ink: #0E180F;
+    --accent-soft: #213622;
+    --done: #131A14;
+    --ring: rgba(227, 236, 223, .5);
+    --shadow: none;
+    --t-braun: #A8743F;
+    --t-schwarz: #050505;
+    --t-blau: #4A8BE6;
+    --t-indigo: #6E62D9;
+    --t-lila: #A865D8;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1510;
+  --surface: #172018;
+  --ink: #E3ECDF;
+  --muted: #9DAE9B;
+  --line: #2C3B2D;
+  --accent: #86C97D;
+  --accent-ink: #0E180F;
+  --accent-soft: #213622;
+  --done: #131A14;
+  --ring: rgba(227, 236, 223, .5);
+  --shadow: none;
+  --t-braun: #A8743F;
+  --t-schwarz: #050505;
+  --t-blau: #4A8BE6;
+  --t-indigo: #6E62D9;
+  --t-lila: #A865D8;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--bg);
+}
+.wrap {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+p { margin: 0; }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent); text-underline-offset: 2px; }
+
+/* Kopf */
+.top { padding-block: 2rem 1.25rem; display: grid; gap: .5rem; }
+.eyebrow {
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  line-height: 1.05;
+  letter-spacing: .01em;
+}
+.lede { color: var(--muted); max-width: 40rem; }
+
+/* Fortschritt */
+.summary {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+  display: grid;
+  gap: 1rem;
+}
+.score { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+.score-num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-xxl);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.score-of { font-family: var(--font-display); font-size: var(--fs-xl); color: var(--muted); }
+.score-label { font-weight: 700; color: var(--muted); }
+.track {
+  position: relative;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  overflow: hidden;
+}
+.track-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width .3s ease;
+}
+.tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--ink);
+  opacity: .35;
+}
+.milestones {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .75rem;
+}
+.ms { display: grid; gap: .15rem; min-width: 0; }
+.ms-at {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+.ms-at::before {
+  content: "";
+  width: .7rem;
+  height: .7rem;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+  flex: none;
+}
+.ms.is-reached .ms-at::before { background: var(--accent); border-color: var(--accent); }
+.ms.is-reached .ms-at { color: var(--accent); }
+.ms-text { font-size: var(--fs-sm); color: var(--muted); }
+
+/* Team-Felder */
+.teams-block { padding-block: 1.5rem .5rem; display: grid; gap: .75rem; }
+.block-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.block-title { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-lg); }
+.linkbtn {
+  background: none;
+  border: 0;
+  padding: .25rem 0;
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.teamgrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: .5rem;
+}
+.tf {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "dot name" "role role" "bar bar";
+  align-items: center;
+  column-gap: .45rem;
+  row-gap: .3rem;
+  text-align: left;
+  padding: .7rem .75rem .75rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  min-width: 0;
+  transition: border-color .15s, box-shadow .15s;
+}
+.tf:hover { border-color: var(--muted); }
+.tf[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.tf .dot { grid-area: dot; }
+.tf-name { grid-area: name; font-weight: 800; display: flex; justify-content: space-between; gap: .4rem; min-width: 0; }
+.tf-count { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 700; font-size: var(--fs-sm); }
+.tf-role { grid-area: role; font-size: var(--fs-xs); color: var(--muted); line-height: 1.3; }
+.tf-bar { grid-area: bar; height: 6px; border-radius: 999px; background: var(--accent-soft); overflow: hidden; }
+.tf-bar i { display: block; height: 100%; width: 0; background: var(--tc); box-shadow: inset 0 0 0 1px var(--ring); border-radius: 999px; transition: width .3s ease; }
+.tf.is-complete .tf-count { color: var(--accent); }
+
+.dot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--tc);
+  box-shadow: inset 0 0 0 1.5px var(--ring);
+  flex: none;
+}
+
+/* Werkzeugleiste */
+.toolbar {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  margin-top: 1rem;
+}
+.toolbar-inner {
+  padding-block: .65rem;
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.search {
+  flex: 1 1 14rem;
+  min-width: 0;
+  height: 2.6rem;
+  padding: 0 .9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+}
+.search::placeholder { color: var(--muted); }
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  padding: 3px;
+  gap: 2px;
+}
+.seg button {
+  border: 0;
+  background: none;
+  border-radius: 999px;
+  padding: .35rem .8rem;
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.mini-count {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-variant-numeric: tabular-nums;
+  padding-inline: .25rem;
+  white-space: nowrap;
+}
+
+/* Liste */
+.list { padding-block: 1rem 2rem; display: grid; gap: 1.75rem; }
+.team { display: grid; gap: .6rem; scroll-margin-top: 5rem; }
+.team-head { display: flex; align-items: center; gap: .6rem; }
+.team-head .dot { width: 1.25rem; height: 1.25rem; }
+.team-title { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-xl); line-height: 1.1; }
+.team-role { font-family: var(--font-body); font-weight: 700; font-size: var(--fs-md); color: var(--muted); margin-left: .35rem; }
+.team-count { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 800; color: var(--muted); white-space: nowrap; }
+.team.is-complete .team-count { color: var(--accent); }
+.team-note { color: var(--muted); font-size: var(--fs-sm); }
+.rows {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 6px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.rows::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: var(--tc);
+  box-shadow: inset -1.5px 0 0 var(--ring);
+}
+.row {
+  display: flex;
+  gap: .85rem;
+  align-items: flex-start;
+  padding: .85rem 1rem;
+  border-top: 1px solid var(--line);
+  transition: background-color .15s;
+}
+.row:first-child { border-top: 0; }
+.row.is-found { background: var(--done); }
+.row-body { display: grid; gap: .2rem; min-width: 0; flex: 1; }
+.row-name {
+  font-weight: 800;
+  font-size: var(--fs-lg);
+  line-height: 1.25;
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .4rem;
+}
+.row.is-found .row-name .nm { text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: var(--accent); }
+.badge {
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: .1rem .45rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+.badge.is-ready { border-color: var(--accent); color: var(--accent); }
+.req { overflow-wrap: anywhere; }
+.row.is-found .req { color: var(--muted); }
+.tip { font-size: var(--fs-sm); color: var(--muted); overflow-wrap: anywhere; }
+.tip b { color: var(--ink); font-weight: 800; }
+
+.cb {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: .1rem 0 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: none;
+  border: 2px solid var(--muted);
+  border-radius: 8px;
+  background: var(--surface);
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  transition: background-color .12s, border-color .12s;
+}
+.cb::after {
+  content: "";
+  width: .5rem;
+  height: .9rem;
+  margin-top: -.2rem;
+  border: solid var(--accent-ink);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform .12s ease;
+}
+.cb:checked { background: var(--accent); border-color: var(--accent); }
+.cb:checked::after { transform: rotate(45deg) scale(1); }
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 2rem 1rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--r);
+}
+
+/* Infos und Sichern */
+.info { padding-block: .5rem 3rem; display: grid; gap: 1.25rem; }
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 1.1rem 1.25rem;
+  display: grid;
+  gap: .75rem;
+  min-width: 0;
+}
+.panel h2 { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-lg); }
+.panel ul { margin: 0; padding-left: 1.2rem; display: grid; gap: .45rem; }
+.panel li { max-width: 65ch; }
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.field-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+.field {
+  flex: 1 1 12rem;
+  min-width: 0;
+  height: 2.6rem;
+  padding: 0 .8rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: var(--fs-sm);
+}
+.btn {
+  height: 2.6rem;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 800;
+  white-space: nowrap;
+}
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.danger { background: transparent; color: var(--t-rot); border-color: var(--t-rot); }
+.btn.danger.solid { background: var(--t-rot); color: #FFFFFF; }
+.hint { font-size: var(--fs-sm); color: var(--muted); }
+.msg { font-size: var(--fs-sm); font-weight: 700; min-height: 1.3em; display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
+.sync { display: flex; gap: .5rem; align-items: center; font-size: var(--fs-sm); color: var(--muted); }
+.sync::before { content: ""; width: .55rem; height: .55rem; border-radius: 50%; background: var(--accent); flex: none; }
+.foot { font-size: var(--fs-sm); color: var(--muted); display: grid; gap: .35rem; }
+
+/* Hinweis unten */
+.toast {
+  position: fixed;
+  left: max(16px, env(safe-area-inset-left, 0px));
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  margin: 0 auto;
+  max-width: 28rem;
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: var(--r);
+  padding: .7rem .8rem .7rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  z-index: 20;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .25);
+}
+.toast-text { flex: 1; min-width: 0; font-weight: 700; }
+.toast button {
+  background: none;
+  border: 1px solid currentColor;
+  color: inherit;
+  border-radius: 8px;
+  padding: .3rem .7rem;
+  font-weight: 800;
+}
+
+@media (max-width: 720px) {
+  .teamgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cols { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 480px) {
+  .milestones { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+  .score-num { font-size: 2.5rem; }
+  .row { padding: .8rem .85rem; gap: .7rem; }
+  .team-role { display: block; margin-left: 0; font-size: var(--fs-sm); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
+</style>
+
+<header class="wrap top">
+  <p class="eyebrow">Harvest Moon DS &middot; auch DS Cute</p>
+  <h1>Wichtel-Checkliste</h1>
+  <p class="lede">Alle 101 Wichtel, sortiert nach ihren Team-Farben. Zu jedem steht, wie du ihn befreist. Hak ab, wen du schon gefunden hast.</p>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="summary" aria-label="Fortschritt">
+      <div class="score">
+        <span class="score-num" id="score">0</span>
+        <span class="score-of">/ 101</span>
+        <span class="score-label">Wichtel gefunden</span>
+      </div>
+      <div class="track" role="progressbar" aria-label="Gefundene Wichtel" aria-valuemin="0" aria-valuemax="101" aria-valuenow="0" id="track">
+        <div class="track-fill" id="track-fill"></div>
+        <span class="tick" style="left: calc(20 / 101 * 100%)"></span>
+        <span class="tick" style="left: calc(60 / 101 * 100%)"></span>
+      </div>
+      <ol class="milestones">
+        <li class="ms" data-at="20"><span class="ms-at">20</span><span class="ms-text">Wichtel Earth erscheint</span></li>
+        <li class="ms" data-at="60"><span class="ms-at">60</span><span class="ms-text">Erntegöttin befreien, danach kommt der Baby-Wichtel</span></li>
+        <li class="ms" data-at="101"><span class="ms-at">101</span><span class="ms-text">Alle befreit. Nötig, um die Erntegöttin zu heiraten</span></li>
+      </ol>
+    </section>
+
+    <section class="teams-block" aria-labelledby="teams-title">
+      <div class="block-head">
+        <h2 class="block-title" id="teams-title">Nach Wichtel-Team filtern</h2>
+        <button type="button" class="linkbtn" id="team-all" hidden>Alle Teams zeigen</button>
+      </div>
+      <div class="teamgrid" id="teamgrid"></div>
+    </section>
+  </div>
+
+  <div class="toolbar">
+    <div class="wrap toolbar-inner">
+      <input type="search" class="search" id="q" placeholder="Name oder Aufgabe suchen, z.&nbsp;B. angeln" aria-label="Wichtel suchen" autocomplete="off">
+      <div class="seg" role="group" aria-label="Status">
+        <button type="button" data-status="alle" aria-pressed="true">Alle</button>
+        <button type="button" data-status="offen" aria-pressed="false">Offen</button>
+        <button type="button" data-status="gefunden" aria-pressed="false">Gefunden</button>
+      </div>
+      <span class="mini-count" id="mini-count" aria-hidden="true">0/101</span>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="list" id="list"></div>
+    <p class="empty" id="empty" hidden>Kein Wichtel passt zu deiner Suche oder deinem Filter.</p>
+  </div>
+
+  <div class="wrap info">
+    <section class="panel" aria-labelledby="know-title">
+      <h2 id="know-title">Gut zu wissen</h2>
+      <ul>
+        <li>Wenn du einen Wichtel findest, stellt er sich vor, nennt sein Team und geht zurück in den Wichtelbaum (Sprite Company). Ein Team kannst du anheuern, sobald es mindestens ein Mitglied hat.</li>
+        <li>Angeheuerte Wichtel zählen bei Zähl-Aufgaben mit, finden ihre versteckten Teamkollegen aber nicht selbst. Den letzten Handgriff, etwa selbst gießen oder angeln, musst du machen.</li>
+        <li>Mit 60 Wichteln kannst du die Erntegöttin befreien. Danach taucht der Baby-Wichtel auf.</li>
+        <li>Die Bedingungen sind in Harvest Moon DS und DS Cute gleich. Die Namen stammen aus der englischen Fassung und können in der deutschen Version leicht anders lauten.</li>
+      </ul>
+    </section>
+
+    <div class="cols">
+      <section class="panel" aria-labelledby="save-title">
+        <h2 id="save-title">Fortschritt sichern</h2>
+        <p class="sync" id="sync">Gespeichert in diesem Browser.</p>
+        <p class="hint">Dein Sicherungscode enthält alle Häkchen. Kopier ihn, um ihn auf einem anderen Gerät zu laden.</p>
+        <div class="field-row">
+          <input class="field" id="code-out" readonly aria-label="Dein Sicherungscode">
+          <button type="button" class="btn" id="code-copy">Kopieren</button>
+        </div>
+        <div class="field-row">
+          <input class="field" id="code-in" placeholder="Code einfügen, z. B. W1-…" aria-label="Sicherungscode laden" autocomplete="off" spellcheck="false">
+          <button type="button" class="btn ghost" id="code-load">Laden</button>
+        </div>
+        <p class="msg" id="code-msg" aria-live="polite"></p>
+      </section>
+
+      <section class="panel" aria-labelledby="reset-title">
+        <h2 id="reset-title">Neues Spiel</h2>
+        <p class="hint">Entfernt alle Häkchen. Sichere vorher deinen Code, falls du ihn noch brauchst.</p>
+        <div class="field-row" id="reset-start">
+          <button type="button" class="btn danger" id="reset">Alle Häkchen entfernen</button>
+        </div>
+        <div class="field-row" id="reset-confirm" hidden>
+          <button type="button" class="btn danger solid" id="reset-yes">Ja, alles löschen</button>
+          <button type="button" class="btn ghost" id="reset-no">Abbrechen</button>
+        </div>
+        <div class="foot">
+          <p>Quellen: <a href="https://fogu.com/hm6/chan3/sprites/index.php" target="_blank" rel="noopener">fogu.com (Ushi No Tane)</a> und <a href="https://harvestmoon.fandom.com/wiki/Harvest_Sprites_(DS)" target="_blank" rel="noopener">Harvest Moon Wiki</a>.</p>
+          <p>Fan-Seite, nicht verbunden mit Marvelous, Natsume oder Rising Star Games.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status" hidden>
+  <span class="toast-text" id="toast-text"></span>
+  <button type="button" id="toast-undo">Rückgängig</button>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var SECRET_TIP = "Welches Feld es ist, ist in jedem Spielstand anders. Der Boden muss gehackt sein, bevor du gießt. Im Winter ist der Boden gefroren, such also von Frühling bis Herbst. Mit aufgerüsteter Hacke und Gießkanne schaffst du große Flächen auf einmal.";
+  var CURSE = " finden und den Fluch von der Kirche aufheben lassen.";
+
+  // [Name, Anführer?, Bedingung, Tipp]
+  var TEAMS = [
+    { id: "braun", name: "Braun", role: "Laden & Casino", short: "Laden & Casino",
+      note: "Betreiben Jets Laden und das Casino im Wichtelbaum. Sie arbeiten nicht auf deiner Farm.",
+      w: [
+        ["Guts", true, "Kommt automatisch: in der ersten Szene, wenn dich die Hexenprinzessin in den Wichtelbaum befördert."],
+        ["Jackie", false, "Versuch, das Tal nach Osten zu verlassen, über den Weg Richtung Mineral Town. Jackie hält dich auf."],
+        ["Jet", false, "Geh im Gasthaus (Inner Inn) in den 2. Stock. Stell dich am Ende des Flurs nördlich an Vans orange Kiste und drück A.", "Jet eröffnet danach einen Laden neben Guts. Dort gibt es die Schallplatten für Jupiter."],
+        ["Roller", false, "Ab dem 8. Frühling über die Brücke Richtung Vestas Farm gehen.", "Roller eröffnet das Casino hinten im Wichtelbaum."],
+        ["Jum", false, "Am Springbrunnen in Romanas Hof, vor ihrem Anwesen, A drücken.", "Schaltet das Memory-Spiel im Casino frei."],
+        ["Tep", false, "Links neben dem Gasthaus steht ein eingezäunter Ofen. Mit A über den Zaun springen, dann vor dem Ofen A drücken.", "Schaltet Blackjack im Casino frei."],
+        ["Hops", false, "Am Ziehbrunnen neben der Blue Bar A drücken.", "Hops ist der Poker-Wichtel im Casino."]
+      ] },
+    { id: "schwarz", name: "Schwarz", role: "Wichtel-Sender", short: "TV-Sender",
+      note: "Die Planeten-Wichtel moderieren die Kanäle der Sprite Station (Fernseher). Jeder neue Wichtel bringt einen Kanal mit.",
+      w: [
+        ["Neptune", false, "Von Anfang an da."],
+        ["Mercury", false, "Erscheint in deiner ersten Szene mit Guts (Kanal 1)."],
+        ["Venus", false, "An insgesamt 10 Tagen etwas in Karens Supermarkt kaufen."],
+        ["Uranus", false, "Die Freundschaft eines Dorfbewohners auf 100 FP bringen."],
+        ["Saturn", false, "An 3 Festen aktiv teilnehmen. Nur zuschauen zählt nicht."],
+        ["Jupiter", false, "5 Schallplatten bei Jet im Wichtelbaum-Laden kaufen."],
+        ["Earth", false, "20 Wichtel befreien.", null, 20],
+        ["Mars", false, "Mindestens 300 Stück einer einzigen Sorte von deiner Farm verschicken: Feldfrüchte, Obst, Blumen, Milch, Eier oder Wolle."],
+        ["Pluto", false, "Mindestens 100.000 Stück einer einzigen Sorte von deiner Farm verschicken.", "Der schwerste Wichtel im ganzen Spiel. Es zählen Feldfrüchte, Obst, Blumen, Milch, Eier und Wolle."]
+      ] },
+    { id: "blau", name: "Blau", role: "Gieß-Team", short: "Gießen",
+      note: "Gießen deine Felder, wenn du sie anheuerst.",
+      w: [
+        ["Ceruleano", true, "Ein geheimes Feld gießen.", SECRET_TIP],
+        ["Karaf", false, "Neben dem Wasserteich auf deiner Farm (beim Pferdestall) A drücken.", "Einer der ersten Wichtel, die du finden kannst."],
+        ["Misty", false, "Deine Gießkanne 10-mal auffüllen."],
+        ["Eviran", false, "Ein geheimes Feld gießen.", "Wie bei Ceruleano. Jeder der drei hat sein eigenes geheimes Feld."],
+        ["Owen", false, "Ein geheimes Feld gießen.", "Wie bei Ceruleano. Jeder der drei hat sein eigenes geheimes Feld."],
+        ["Chorori", false, "1.000 Felder gießen.", "Angeheuerte Gieß-Wichtel zählen mit, finden ihre Kollegen aber nicht. Gieß zwischendurch immer wieder selbst."],
+        ["Walter", false, "5.000 Felder gießen."],
+        ["Rainy", false, "10.000 Felder gießen."],
+        ["Joro", false, "30.000 Felder gießen."],
+        ["Patty", false, "50.000 Felder gießen."],
+        ["Roli", false, "Gießkanne auf Mystrile (Stufe 5) verbessern und benutzen."],
+        ["Maddie", false, "Die verfluchte Gießkanne in den Minen" + CURSE]
+      ] },
+    { id: "rot", name: "Rot", role: "Tierzucht-Team", short: "Tierzucht",
+      note: "Kümmern sich ums Füttern und um Milch, Eier und Wolle.",
+      w: [
+        ["Red Ribbon", true, "Insgesamt 10 ausgewachsene Kühe und Schafe haben. Dafür brauchst du 3 Tierställe.", "Mehr als 7 Ställe gehen nicht. Lies den Tipp bei Woohoo, bevor du baust."],
+        ["Wooly", false, "Mindestens 300 Milch, Eier und/oder Wolle verschicken, zusammengezählt."],
+        ["Laine", false, "Mindestens 500 Milch, Eier und/oder Wolle verschicken."],
+        ["Essa", false, "Mindestens 1.000 Milch, Eier und/oder Wolle verschicken."],
+        ["Sue", false, "Mit dem Touch-Handschuh 100 Flaschen Milch melken.", "Handschuh und Melker ausrüsten, neben einer zufriedenen Kuh Y drücken und mit dem Stylus waagerecht über das Euter reiben. Schneller reiben gibt bessere Milch."],
+        ["Magic", false, "Mit dem Touch-Handschuh 300 Flaschen Milch melken."],
+        ["Bali", false, "Mit dem Touch-Handschuh 700 Flaschen Milch melken."],
+        ["Betty", false, "Mit dem Touch-Handschuh 100-mal Wolle scheren.", "Handschuh und Schere ausrüsten, vor einem Schaf mit Wolle Y drücken und die Wolle mit dem Stylus abrubbeln."],
+        ["Chamy", false, "Mit dem Touch-Handschuh 300-mal Wolle scheren."],
+        ["Ole", false, "Mit dem Touch-Handschuh 700-mal Wolle scheren."],
+        ["Mick", false, "Insgesamt 10 Hühner und Enten haben. Dafür brauchst du 3 Geflügelställe."],
+        ["Woohoo", false, "Insgesamt 20 Hühner und Enten haben. Dafür brauchst du 5 Geflügelställe.", "Mehr als 7 Ställe gehen nicht, das beißt sich mit Red Ribbon. Bau zuerst die 5 Geflügelställe, hol Woohoo, verkauf die überzähligen Vögel und lass Gotz die übrigen Ställe abreißen. Danach die 3 Tierställe für Red Ribbon bauen."]
+      ] },
+    { id: "gelb", name: "Gelb", role: "Tierpflege-Team", short: "Tierpflege",
+      note: "Bürsten und streicheln deine Tiere.",
+      w: [
+        ["Canary", true, "15 Tiere auf deiner Farm zur Welt kommen lassen, Geflügel und/oder Nutztiere.", "Mit Küken geht es am schnellsten, die schlüpfen nach wenigen Tagen."],
+        ["Kali", false, "Deine Tiere insgesamt 50-mal bürsten, hochheben oder ansprechen, ohne Touch-Handschuh. Haustiere zählen mit.", "Nimm den Touch-Handschuh dafür aus dem Accessoire-Platz im Rucksack."],
+        ["Johnny", false, "Deine Tiere insgesamt 350-mal bürsten, hochheben oder ansprechen, ohne Touch-Handschuh."],
+        ["Brushy", false, "Deine Tiere insgesamt 900-mal bürsten, hochheben oder ansprechen, ohne Touch-Handschuh."],
+        ["Mouton", false, "Deine Tiere 50-mal mit dem Touch-Handschuh streicheln.", "Handschuh in den Accessoire-Platz im Rucksack legen, kein Tier-Werkzeug in der Hand. Neben dem Tier A drücken und mit dem Stylus streicheln."],
+        ["Boohoo", false, "Deine Tiere 100-mal mit dem Touch-Handschuh streicheln."],
+        ["Canal", false, "Deine Tiere 300-mal mit dem Touch-Handschuh streicheln."],
+        ["Meow", false, "Deine Tiere 500-mal mit dem Touch-Handschuh streicheln."],
+        ["Beta", false, "Deine Tiere 50-mal mit Bürste und Touch-Handschuh waschen."],
+        ["Aiylee", false, "Deine Tiere 100-mal mit Bürste und Touch-Handschuh waschen."],
+        ["Pompom", false, "Deine Tiere 300-mal mit Bürste und Touch-Handschuh waschen."],
+        ["Zoo", false, "Deine Tiere 500-mal mit Bürste und Touch-Handschuh waschen."]
+      ] },
+    { id: "gruen", name: "Grün", role: "Ernte-Team", short: "Ernte",
+      note: "Ernten deine Felder ab.",
+      w: [
+        ["Forest", true, "Sichel auf Mystrile (Stufe 5) verbessern und benutzen."],
+        ["Kamar", false, "1 Kohl verschicken.", "Kohlsamen gibt es im Wichtel-Casino für 500 Medaillen. Kohl wächst im Frühling."],
+        ["Moor", false, "1 Ananas verschicken.", "Ananassamen gibt es im Casino für 1.000 Medaillen. Ananas wächst im Sommer."],
+        ["Vail", false, "1 grüne Paprika verschicken.", "Paprikasamen gibt es im Casino für 150 Medaillen. Paprika wächst im Herbst."],
+        ["Veggie", false, "Den Versandkorb in Karens Supermarkt kaufen (5.000 G) und etwas hineinlegen."],
+        ["Kevin", false, "Etwas in die Satteltaschen deines Pferdes legen.", "Das Pferd bringt dir Takakura, sobald du 1.000 Dinge verschickt hast."],
+        ["Fraw", false, "1.000 Dinge in die Versandkiste legen.", "Alles zählt, was in die Kiste passt, auch Unkraut und Äste."],
+        ["Ridge", false, "5.000 Dinge in die Versandkiste legen."],
+        ["Ali", false, "10.000 Dinge in die Versandkiste legen."],
+        ["Cady", false, "30.000 Dinge in die Versandkiste legen."],
+        ["Paddy", false, "50.000 Dinge in die Versandkiste legen."],
+        ["Matthew", false, "Die verfluchte Sichel (Stufe 6) in der 3. Mine" + CURSE]
+      ] },
+    { id: "indigo", name: "Indigo", role: "Angel-Team", short: "Angeln",
+      note: "Angeln für dich.",
+      w: [
+        ["Blue", true, "Die Angel in der heißen Quelle beim Zirkusgelände auswerfen.", "Die Quelle öffnet sich mit Floras blauem Herz-Event oder nach der Geburt deines Kindes. In DS Cute reicht Floras Freundschaft ab 250."],
+        ["Riviera", false, "Die Angel im Wasserteich auf deiner Farm auswerfen."],
+        ["Yacht", false, "Gotz den Ententeich auf deiner Farm bauen lassen und dort die Angel auswerfen."],
+        ["Reese", false, "Die Angel in der heißen Quelle am Göttinnenteich auswerfen.", "Diese Quelle öffnet sich, nachdem du die erste heiße Quelle 100-mal benutzt hast."],
+        ["Paige", false, "50 Fische fangen.", "Angeheuerte Angel-Wichtel zählen mit, finden ihre Kollegen aber nicht. Ist die Zahl erreicht, wirf selbst irgendwo die Angel aus."],
+        ["Fry", false, "500 Fische fangen."],
+        ["Rod", false, "1.000 Fische fangen."],
+        ["Gigi", false, "5.000 Fische fangen."],
+        ["Pedro", false, "10.000 Fische fangen."],
+        ["Tricky", false, "50.000 Fische fangen."],
+        ["Fisher", false, "Die Mystrile-Angel (Stufe 5) zum ersten Mal benutzen."],
+        ["Sammy", false, "Die verfluchte Angel in den Minen" + CURSE]
+      ] },
+    { id: "orange", name: "Orange", role: "Sammel-Team", short: "Holz & Steine",
+      note: "Sammeln Holz und Steine.",
+      w: [
+        ["Oran", true, "Am 2. Winter kommt Thomas morgens und wünscht sich einen Gegenstand. Gib ihn ihm, wenn er um 16:30 Uhr zurückkommt.", "Als Dank gibt es Goldholz, danach erscheint Oran."],
+        ["Bran", false, "100 Äste mit der Axt hacken."],
+        ["Decoy", false, "250 Äste mit der Axt hacken."],
+        ["Woody", false, "500 Äste mit der Axt hacken."],
+        ["Pierre", false, "15 Baumstümpfe mit der Axt spalten.", "Dafür brauchst du mindestens die Kupfer-Axt (Stufe 2)."],
+        ["Tilus", false, "100 kleine Steine mit dem Hammer zerschlagen."],
+        ["Stony", false, "250 kleine Steine mit dem Hammer zerschlagen."],
+        ["Rosh", false, "500 kleine Steine mit dem Hammer zerschlagen."],
+        ["Alpen", false, "5 große Steine mit dem Hammer zerschlagen.", "Gemeint sind große, glatte Steine, nicht die kantigen Felsbrocken. Dafür brauchst du mindestens den Kupfer-Hammer."],
+        ["Rocky", false, "15 große Steine mit dem Hammer zerschlagen."],
+        ["Valie", false, "Axt auf Mystrile (Stufe 5) verbessern und benutzen."],
+        ["Fen", false, "Den verfluchten Hammer (Stufe 6) in der 3. Mine" + CURSE]
+      ] },
+    { id: "lila", name: "Lila", role: "Erholungs-Team", short: "Ausdauer",
+      note: "Füllen deine Ausdauer wieder auf.",
+      w: [
+        ["Violetto", true, "Die heiße Quelle beim Zirkusgelände 200-mal benutzen, jedes Mal mindestens 1 Stunde.", "Rein, eine Stunde sitzen, raus. Kurz rein und wieder raus zählt nicht. Die Quelle öffnet sich mit Floras blauem Herz-Event."],
+        ["Spirity", false, "1 Getränk in der Blue Bar kaufen.", "Die Bar hat abends geöffnet. Wasser zählt nicht."],
+        ["Souly", false, "50 Getränke in der Blue Bar kaufen. Wasser zählt nicht."],
+        ["Anime", false, "30 Wildkräuter essen.", "Kraut in die Hand nehmen und X drücken. Elli-Blätter zählen mit."],
+        ["Powery", false, "80 Wildkräuter essen."],
+        ["Koto", false, "150 Wildkräuter essen."],
+        ["Carey", false, "Die heiße Quelle am Göttinnenteich 200-mal benutzen, jedes Mal mindestens 1 Stunde.", "Diese Quelle öffnet sich, nachdem du die erste heiße Quelle 100-mal benutzt hast."],
+        ["Sacci", false, "Die heiße Quelle am Göttinnenteich 500-mal benutzen, jedes Mal mindestens 1 Stunde."],
+        ["Nette", false, "Das Erholungs-Team anheuern und dir 100-mal die Ausdauer auffüllen lassen.", "Das geht etwa einmal pro halbe Spielstunde."],
+        ["Whitney", false, "Das Erholungs-Team anheuern und dir 500-mal die Ausdauer auffüllen lassen."],
+        ["Juna", false, "Das Erholungs-Team anheuern und dir 750-mal die Ausdauer auffüllen lassen."],
+        ["Sante", false, "Das Erholungs-Team anheuern und dir 1.000-mal die Ausdauer auffüllen lassen."]
+      ] },
+    { id: "weiss", name: "Weiß", role: "Baby-Wichtel", short: "Baby",
+      note: "Ein einzelner Wichtel, der erst nach der Erntegöttin auftaucht.",
+      w: [
+        ["Baby-Wichtel", false, "Nachdem du 60 Wichtel gefunden und die Erntegöttin befreit hast: im Wichtelbaum vor dem großen Topf links neben der Theke A drücken.", "Isst am liebsten Curryreis.", 60]
+      ] }
+  ];
+
+  // Daten aufbereiten
+  var ALL = [];
+  TEAMS.forEach(function (t) {
+    t.items = t.w.map(function (a) {
+      var w = { name: a[0], lead: !!a[1], req: a[2], tip: a[3] || "", need: a[4] || 0, team: t };
+      w.id = a[0].toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      w.i = ALL.length;
+      w.hay = [w.name, w.req, w.tip, t.name, t.role, t.short].join(" ").toLowerCase();
+      ALL.push(w);
+      return w;
+    });
+  });
+  var TOTAL = ALL.length;
+  var byId = {};
+  ALL.forEach(function (w) { byId[w.id] = w; });
+
+  // Speicher im Browser (darf fehlen)
+  var LS_KEY = "hmds-wichtel-v1";
+  var LS_UI = "hmds-wichtel-ui-v1";
+  function lsGet(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* ohne Speicher weiter */ } }
+  function cleanIds(arr) {
+    var s = new Set();
+    if (Array.isArray(arr)) arr.forEach(function (id) { if (typeof id === "string" && byId[id]) s.add(id); });
+    return s;
+  }
+  function loadLocal() {
+    try { return cleanIds(JSON.parse(lsGet(LS_KEY) || "[]")); } catch (e) { return new Set(); }
+  }
+  function saveLocal() { lsSet(LS_KEY, JSON.stringify(Array.from(found))); }
+
+  var found = loadLocal();
+  var ui = { team: "alle", status: "alle", q: "" };
+  try {
+    var savedUi = JSON.parse(lsGet(LS_UI) || "{}");
+    if (savedUi && typeof savedUi === "object") {
+      if (savedUi.team === "alle" || TEAMS.some(function (t) { return t.id === savedUi.team; })) ui.team = savedUi.team;
+      if (["alle", "offen", "gefunden"].indexOf(savedUi.status) >= 0) ui.status = savedUi.status;
+    }
+  } catch (e) { /* Standardfilter */ }
+  function saveUi() { lsSet(LS_UI, JSON.stringify({ team: ui.team, status: ui.status })); }
+
+  // Sicherungscode: ein Bit pro Wichtel, als Base36
+  function encode(set) {
+    var n = BigInt(0);
+    ALL.forEach(function (w) { if (set.has(w.id)) n = n | (BigInt(1) << BigInt(w.i)); });
+    return "W1-" + n.toString(36).toUpperCase();
+  }
+  function decode(code) {
+    var m = /^W1-([0-9A-Z]+)$/i.exec(String(code).replace(/\s+/g, ""));
+    if (!m) return null;
+    var n = BigInt(0);
+    var digits = m[1].toLowerCase();
+    for (var k = 0; k < digits.length; k++) {
+      var d = parseInt(digits[k], 36);
+      if (isNaN(d)) return null;
+      n = n * BigInt(36) + BigInt(d);
+    }
+    if ((n >> BigInt(TOTAL)) > BigInt(0)) return null;
+    var s = new Set();
+    ALL.forEach(function (w) { if (((n >> BigInt(w.i)) & BigInt(1)) === BigInt(1)) s.add(w.id); });
+    return s;
+  }
+
+  // DOM bauen
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  var teamgrid = document.getElementById("teamgrid");
+  var list = document.getElementById("list");
+
+  TEAMS.forEach(function (t) {
+    var color = "var(--t-" + t.id + ")";
+
+    var b = el("button", "tf");
+    b.type = "button";
+    b.id = "tf-" + t.id;
+    b.style.setProperty("--tc", color);
+    b.setAttribute("aria-pressed", "false");
+    b.appendChild(el("span", "dot"));
+    var nm = el("span", "tf-name");
+    nm.appendChild(el("span", null, t.name));
+    t.tfCount = el("span", "tf-count", "0/" + t.items.length);
+    nm.appendChild(t.tfCount);
+    b.appendChild(nm);
+    b.appendChild(el("span", "tf-role", t.short));
+    var bar = el("span", "tf-bar");
+    t.tfBar = el("i");
+    bar.appendChild(t.tfBar);
+    b.appendChild(bar);
+    b.addEventListener("click", function () {
+      ui.team = ui.team === t.id ? "alle" : t.id;
+      saveUi();
+      applyFilter();
+      if (ui.team !== "alle") {
+        var smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        document.getElementById("list").scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+      }
+    });
+    t.tf = b;
+    teamgrid.appendChild(b);
+
+    var sec = el("section", "team");
+    sec.id = "team-" + t.id;
+    sec.style.setProperty("--tc", color);
+    var head = el("div", "team-head");
+    head.appendChild(el("span", "dot"));
+    var h = el("h2", "team-title", t.name);
+    h.appendChild(el("span", "team-role", t.role));
+    head.appendChild(h);
+    t.secCount = el("span", "team-count", "0/" + t.items.length);
+    head.appendChild(t.secCount);
+    sec.appendChild(head);
+    sec.appendChild(el("p", "team-note", t.note));
+    var ul = el("ul", "rows");
+
+    t.items.forEach(function (w) {
+      var li = el("li", "row");
+      var cb = el("input", "cb");
+      cb.type = "checkbox";
+      cb.id = "w-" + w.id;
+      cb.setAttribute("aria-describedby", "r-" + w.id);
+      cb.addEventListener("change", function () { setFound(w, cb.checked); });
+      li.appendChild(cb);
+      var body = el("div", "row-body");
+      var lab = el("label", "row-name");
+      lab.htmlFor = cb.id;
+      lab.appendChild(el("span", "nm", w.name));
+      if (w.lead) lab.appendChild(el("span", "badge", "Anführer"));
+      if (w.need) {
+        w.readyEl = el("span", "badge is-ready", w.need + " erreicht, jetzt holbar");
+        w.readyEl.hidden = true;
+        lab.appendChild(w.readyEl);
+      }
+      body.appendChild(lab);
+      var req = el("p", "req", w.req);
+      req.id = "r-" + w.id;
+      body.appendChild(req);
+      if (w.tip) {
+        var tip = el("p", "tip");
+        tip.appendChild(el("b", null, "Tipp: "));
+        tip.appendChild(document.createTextNode(w.tip));
+        body.appendChild(tip);
+      }
+      li.appendChild(body);
+      w.el = li;
+      w.cb = cb;
+      ul.appendChild(li);
+    });
+    sec.appendChild(ul);
+    t.sec = sec;
+    list.appendChild(sec);
+  });
+
+  // Anzeige aktualisieren
+  var scoreEl = document.getElementById("score");
+  var miniEl = document.getElementById("mini-count");
+  var trackEl = document.getElementById("track");
+  var fillEl = document.getElementById("track-fill");
+  var codeOut = document.getElementById("code-out");
+  var milestones = Array.prototype.slice.call(document.querySelectorAll(".ms"));
+
+  function update() {
+    var n = found.size;
+    scoreEl.textContent = n;
+    miniEl.textContent = n + "/" + TOTAL;
+    trackEl.setAttribute("aria-valuenow", String(n));
+    fillEl.style.width = (n / TOTAL * 100) + "%";
+    milestones.forEach(function (m) {
+      m.classList.toggle("is-reached", n >= Number(m.getAttribute("data-at")));
+    });
+    TEAMS.forEach(function (t) {
+      var c = 0;
+      t.items.forEach(function (w) {
+        var f = found.has(w.id);
+        if (f) c++;
+        w.cb.checked = f;
+        w.el.classList.toggle("is-found", f);
+        if (w.readyEl) w.readyEl.hidden = f || (n - (f ? 1 : 0)) < w.need;
+      });
+      var txt = c + "/" + t.items.length;
+      t.tfCount.textContent = txt;
+      t.secCount.textContent = txt;
+      t.tfBar.style.width = (c / t.items.length * 100) + "%";
+      var done = c === t.items.length;
+      t.tf.classList.toggle("is-complete", done);
+      t.sec.classList.toggle("is-complete", done);
+      t.tf.setAttribute("aria-label", t.name + ", " + t.role + ": " + c + " von " + t.items.length + " gefunden");
+    });
+    codeOut.value = encode(found);
+  }
+
+  var emptyEl = document.getElementById("empty");
+  var teamAllBtn = document.getElementById("team-all");
+  var segBtns = Array.prototype.slice.call(document.querySelectorAll(".seg button"));
+
+  function isShown(w) {
+    var f = found.has(w.id);
+    if (ui.team !== "alle" && ui.team !== w.team.id) return false;
+    if (ui.status === "offen" && f) return false;
+    if (ui.status === "gefunden" && !f) return false;
+    var q = ui.q.trim().toLowerCase();
+    return !q || w.hay.indexOf(q) >= 0;
+  }
+  function applyFilter() {
+    var visible = 0;
+    TEAMS.forEach(function (t) {
+      var tv = 0;
+      t.items.forEach(function (w) {
+        var show = isShown(w);
+        w.el.hidden = !show;
+        if (show) tv++;
+      });
+      t.sec.hidden = tv === 0;
+      t.tf.setAttribute("aria-pressed", String(ui.team === t.id));
+      visible += tv;
+    });
+    emptyEl.hidden = visible > 0;
+    teamAllBtn.hidden = ui.team === "alle";
+    segBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-status") === ui.status)); });
+  }
+
+  // Hinweis mit Rückgängig, wenn ein Häkchen den Eintrag aus dem Filter wirft
+  var toast = document.getElementById("toast");
+  var toastText = document.getElementById("toast-text");
+  var toastUndo = document.getElementById("toast-undo");
+  var toastTimer = null;
+  var lastToggle = null;
+  function showToast(text, undo) {
+    toastText.textContent = text;
+    lastToggle = undo;
+    toast.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.hidden = true; lastToggle = null; }, 5000);
+  }
+  toastUndo.addEventListener("click", function () {
+    if (lastToggle) lastToggle();
+    toast.hidden = true;
+    lastToggle = null;
+  });
+
+  function setFound(w, on) {
+    if (on) found.add(w.id); else found.delete(w.id);
+    saveLocal();
+    update();
+    applyFilter();
+    scheduleWrite();
+    if (w.el.hidden) {
+      showToast(w.name + (on ? " ist abgehakt." : " ist wieder offen."), function () { setFound(w, !on); });
+    }
+  }
+  function replaceAll(set) {
+    found = set;
+    saveLocal();
+    update();
+    applyFilter();
+    scheduleWrite();
+  }
+
+  // Filter-Bedienung
+  teamAllBtn.addEventListener("click", function () { ui.team = "alle"; saveUi(); applyFilter(); });
+  segBtns.forEach(function (b) {
+    b.addEventListener("click", function () { ui.status = b.getAttribute("data-status"); saveUi(); applyFilter(); });
+  });
+  var qEl = document.getElementById("q");
+  qEl.addEventListener("input", function () { ui.q = qEl.value; applyFilter(); });
+
+  // Sicherungscode
+  var codeMsg = document.getElementById("code-msg");
+  function setMsg(text, undoFn) {
+    codeMsg.textContent = text;
+    if (undoFn) {
+      var u = el("button", "linkbtn", "Rückgängig");
+      u.type = "button";
+      u.addEventListener("click", function () { undoFn(); setMsg("Vorheriger Stand ist wieder da."); });
+      codeMsg.appendChild(u);
+    }
+  }
+  document.getElementById("code-copy").addEventListener("click", function () {
+    var text = codeOut.value;
+    function fallback() {
+      codeOut.focus();
+      codeOut.select();
+      setMsg("Code markiert. Kopier ihn mit Strg+C oder lange tippen.");
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { setMsg("Code kopiert."); }, fallback);
+      } else { fallback(); }
+    } catch (e) { fallback(); }
+  });
+  var codeIn = document.getElementById("code-in");
+  function loadCode() {
+    var s = decode(codeIn.value);
+    if (!s) {
+      setMsg("Dieser Code passt nicht. Er beginnt mit W1- und enthält nur Buchstaben und Ziffern.");
+      return;
+    }
+    var before = new Set(found);
+    replaceAll(s);
+    codeIn.value = "";
+    setMsg("Code geladen: " + s.size + " Wichtel abgehakt.", function () { replaceAll(before); });
+  }
+  document.getElementById("code-load").addEventListener("click", loadCode);
+  codeIn.addEventListener("keydown", function (e) { if (e.key === "Enter") loadCode(); });
+
+  // Zurücksetzen mit Bestätigung auf der Seite
+  var resetStart = document.getElementById("reset-start");
+  var resetConfirm = document.getElementById("reset-confirm");
+  document.getElementById("reset").addEventListener("click", function () {
+    resetStart.hidden = true;
+    resetConfirm.hidden = false;
+    document.getElementById("reset-no").focus();
+  });
+  document.getElementById("reset-no").addEventListener("click", function () {
+    resetConfirm.hidden = true;
+    resetStart.hidden = false;
+  });
+  document.getElementById("reset-yes").addEventListener("click", function () {
+    var before = new Set(found);
+    replaceAll(new Set());
+    resetConfirm.hidden = true;
+    resetStart.hidden = false;
+    setMsg("Alle Häkchen entfernt.", function () { replaceAll(before); });
+  });
+
+  // Speichern im Claude-Konto, wenn die Seite als Artifact läuft
+  var syncEl = document.getElementById("sync");
+  var LOCAL_TEXT = "Gespeichert in diesem Browser.";
+  var cloud = null;
+  var dirty = false;
+  var writing = false;
+  var retried = false;
+  var writeTimer = null;
+  function sameSet(a, b) {
+    if (a.size !== b.size) return false;
+    var same = true;
+    a.forEach(function (x) { if (!b.has(x)) same = false; });
+    return same;
+  }
+  function scheduleWrite(delay) {
+    if (!cloud) return;
+    dirty = true;
+    clearTimeout(writeTimer);
+    writeTimer = setTimeout(flush, delay == null ? 700 : delay);
+  }
+  function flush() {
+    if (!cloud || writing) return;
+    writing = true;
+    dirty = false;
+    var body = { found: Array.from(found), updatedAt: Date.now() };
+    cloud.ref.set(body).then(function () {
+      retried = false;
+    }, function (e) {
+      var code = e && e.code;
+      if (code === "unavailable" && !retried) {
+        retried = true;
+        dirty = true;
+      } else if (code === "unavailable" || code === "resource_exhausted") {
+        syncEl.textContent = "Konto gerade nicht erreichbar. Deine Häkchen sind in diesem Browser gespeichert.";
+      } else {
+        cloud = null;
+        syncEl.textContent = LOCAL_TEXT;
+      }
+    }).then(function () {
+      writing = false;
+      if (dirty && cloud) writeTimer = setTimeout(flush, 800 + Math.random() * 800);
+    });
+  }
+  function initCloud() {
+    var c = window.claude;
+    if (!c || typeof c.use !== "function") return;
+    syncEl.textContent = "Verbinde mit deinem Konto …";
+    Promise.all([c.use("db"), c.use("user")]).then(function (res) {
+      var db = res[0], user = res[1];
+      if (!db || !user) { syncEl.textContent = LOCAL_TEXT; return null; }
+      return user.id().then(function (uid) {
+        if (!uid) { syncEl.textContent = LOCAL_TEXT; return; }
+        var ref;
+        try { ref = db.doc("data/users/" + uid + "/progress"); } catch (e) { syncEl.textContent = LOCAL_TEXT; return; }
+        cloud = { ref: ref };
+        var settled = false;
+        var slow = setTimeout(function () {
+          if (!settled) syncEl.textContent = "Konto gerade nicht erreichbar. Deine Häkchen sind in diesem Browser gespeichert.";
+        }, 10000);
+        ref.onSnapshot(function (snap) {
+          if (!snap.metadata.fromCache && !settled) {
+            settled = true;
+            clearTimeout(slow);
+          }
+          if (dirty || writing) return;
+          if (snap.exists) {
+            var data = snap.data() || {};
+            var s = cleanIds(data.found);
+            if (!sameSet(s, found)) {
+              found = s;
+              saveLocal();
+              update();
+              applyFilter();
+            }
+          } else if (!snap.metadata.fromCache && found.size > 0) {
+            scheduleWrite(0);
+          }
+          if (settled) syncEl.textContent = "Gespeichert in deinem Claude-Konto, auf jedem Gerät gleich.";
+        }, function () {
+          settled = true;
+          clearTimeout(slow);
+          cloud = null;
+          syncEl.textContent = LOCAL_TEXT;
+        });
+      });
+    }).catch(function () { syncEl.textContent = LOCAL_TEXT; });
+  }
+
+  qEl.value = "";
+  update();
+  applyFilter();
+  initCloud();
+})();
+</script>
+</body>
+</html>
