@@ -42,7 +42,7 @@ Als eigene Webseite über GitHub Pages: im Repository unter **Settings → Pages
 ## Quellen
 
 - [fogu.com – Ushi No Tane x6 (Harvest Moon DS)](https://fogu.com/hm6/index.php): Wichtel, Versandliste, Läden, Werkzeuge, Gebäude, Pflanzen, Fische, Minen, Figuren, Herz-Events, Feste
-- [Harvest Moon Wiki](https://harvestmoon.fandom.com/wiki/Harvest_Moon_DS): zum Gegenprüfen. Von dort stammen die Wachstumstage, die Jahreszeiten der Samen und die Besuchstage von Van; wo das Wiki etwas ergänzt, steht „laut Wiki“ dabei. Die Anleitungen im Reiter „Freischalten“ wurden gegen beide Quellen geprüft.
+- [Harvest Moon Wiki](https://harvestmoon.fandom.com/wiki/Harvest_Moon_DS): zum Gegenprüfen. Von dort stammen die Wachstumstage, die Jahreszeiten der Samen und die Besuchstage von Van; wo das Wiki etwas ergänzt, steht „laut Wiki“ dabei. Die Anleitungen im Reiter „Freischalten“ wurden gegen beide Quellen geprüft und danach noch einmal Satz für Satz nachgeprüft (Zahlen, Zeiten, Bedingungen und Verweise).
 
 Die deutschen Item-Namen sind eigene Übersetzungen. Der englische Name steht jeweils dabei, weil die deutsche Spielversion andere Namen verwenden kann.
 
